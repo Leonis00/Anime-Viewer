@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Video Viewer</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
+    <link
+      href="https://unpkg.com/video.js/dist/video-js.min.css"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
+  </head>
+  <body>
+    <header class="navbar">
+      <h1 class="logo">My Video Viewer</h1>
+      <form class="search-form">
+        <input type="text" />
+        <button type="submit">
+          <img
+            src="images/search_white.png"
+            alt="Register Directory"
+            style="max-width: 20px"
+          />
+        </button>
+      </form>
+      <nav>
+        <ul class="nav-links">
+          <li>
+            <a href="#" id="viewDirectoryBtn"
+              ><img
+                src="images/repository_white.png"
+                alt="View Directory"
+                style="max-width: 30px"
+            /></a>
+          </li>
+          <li>
+            <a href="#" id="fileSelectBtn"
+              ><img
+                src="images/plus_white.png"
+                alt="Register Directory"
+                style="max-width: 30px"
+            /></a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <div id="videoContainer">
+        <video src="/video" controls></video>
+      </div>
+      <div id="rightPanel">
+        <div id="folderName">현재 폴더 <span id="folderNameValue"></span></div>
+        <div id="fileName">현재 파일 <span id="fileNameValue"></span></div>
+        <div id="fileList">
+          관련 재생목록
+          <ul id="playlist"></ul>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; My Video Viewer</p>
+    </footer>
+  </body>
+  <script src="js/register-directory.js"></script>
+  <script src="js/view-directory.js"></script>
+  <script src="js/change-video.js"></script>
+  <script src="js/get-video-information.js"></script>
+  <script>
+    goHome();
+    function goHome() {
+      const logo = document.querySelector(".logo");
+      logo.addEventListener("click", () => {
+        window.location.href = "/";
+      });
+    }
+
+    const submitButton = document.querySelector(".search-form button");
+
+    // 개발 중이기 때문에 무반응 설정
+    submitButton.addEventListener("click", (event) => {
+      event.preventDefault();
+    });
+  </script>
+</html>
