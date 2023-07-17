@@ -32,7 +32,7 @@ function createWindow() {
     mainWindow.setMenu(null); // 메뉴 제거
 
     // 개발자 도구를 별도의 새 창에 띄우기
-    mainWindow.webContents.openDevTools({ mode: 'undocked' });
+    // mainWindow.webContents.openDevTools({ mode: 'undocked' });
 
     // pid 추출하기
     mainWindow.webContents.on('console-message', (event, level, message) => {
