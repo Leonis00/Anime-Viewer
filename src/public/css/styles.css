@@ -5,34 +5,6 @@ body {
   overflow: hidden; /* 가로 스크롤 막기 */
 }
 
-@media only screen and (max-device-width: 430px) {
-  .navbar {
-    display: flex;
-    justify-content: center;
-    padding: 10px;
-  }
-
-  .search-form {
-    display: none !important;
-  }
-
-  .nav-links {
-    display: none;
-  }
-
-  .logo {
-    margin-right: 0;
-  }
-
-  #rightPanel {
-    display: none;
-  }
-
-  body {
-    overflow-x: hidden;
-  }
-}
-
 .navbar {
   position: fixed;
   top: 0;
@@ -134,6 +106,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 3vh;
   height: 85vh; /* 화면 전체 높이 기준 */
   background-color: #121212;
 }
@@ -146,12 +119,21 @@ video {
   object-fit: contain;
 }
 
-#rightPanel {
-  flex: 1;
-  background-color: #121212;
+#sidebar {
+  position: fixed;
+  top: 80px;
+  right: -100%; /* 초기에는 사이드바가 화면 오른쪽에 숨겨져 있음 */
+  width: calc(100% - 40px); /* 오른쪽과 왼쪽 padding을 고려하여 너비 계산 */
+  height: 100vh;
   padding: 20px;
-  height: 85vh;
+  background-color: #121212;
+  color: #c9b4b4;
+  transition: right 0.3s ease-in-out; /* 오른쪽으로 이동하는 애니메이션 효과를 추가 */
   overflow-y: auto;
+}
+
+#sidebar.open {
+  right: 0px;
 }
 
 #folderName,
@@ -177,6 +159,7 @@ video {
 
 #playlist li {
   margin-bottom: 5px; /* 재생목록 아이템 사이에 원하는 간격을 주세요 */
+  cursor: pointer;
 }
 
 .footer {
@@ -254,4 +237,64 @@ td.delete-link {
 
 a.delete-link {
   text-decoration: none;
+}
+
+@media only screen and (max-device-width: 430px) {
+  .navbar {
+    display: flex;
+    justify-content: center;
+    height: 150px;
+  }
+
+  .search-form {
+    display: none;
+  }
+
+  .logo {
+    display: none;
+  }
+
+  .nav-links a img {
+    display: block;
+    max-width: 100px;
+    margin-right: 30px; /* 여백 추가 */
+  }
+
+  #sidebar {
+    top: 150px;
+    height: 70vh;
+  }
+
+  #folderName,
+  #fileName,
+  #fileList {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: white;
+  }
+
+  #folderNameValue,
+  #fileNameValue {
+    font-size: 50px;
+    color: #c9b4b4;
+  }
+
+  #playlist {
+    font-size: 50px;
+    list-style-type: none;
+    padding-left: 0;
+    color: #c9b4b4;
+  }
+
+  .playlist-item {
+    margin-bottom: 30px !important; /* 아래쪽 간격 */
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .footer {
+    display: none;
+  }
 }

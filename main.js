@@ -34,6 +34,7 @@ function createWindow() {
     // 개발자 도구를 별도의 새 창에 띄우기
     mainWindow.webContents.openDevTools({ mode: 'undocked' });
 
+    // pid 추출하기
     mainWindow.webContents.on('console-message', (event, level, message) => {
         console.log('Developer Tools Log:', message);
 
@@ -41,7 +42,7 @@ function createWindow() {
         const match = message.match(pidPattern);
         if (match && match[1]) { // 첫 번째 값 추출
             const pid = match[1];
-            console.log('PID:', pid);
+            console.log('pid:', pid);
             mainWindow.webContents.send('pid', pid);
             pid_global = pid;
         }
@@ -59,16 +60,28 @@ app.whenReady().then(() => {
     });
 });
 
+let isOpen_global;
+ipcMain.on('server-status', (event, status) => {
+    const { isOpen } = status;
+    console.log("isOpen: ", isOpen);
+    isOpen_global = isOpen;
+});
+
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
-        console.log('Server will be closed');
-        killProcess(pid_global, (error) => {
-            if (error) {
-                console.error('Failed to kill process:', error);
-                return;
-            }
+        if (isOpen_global) {
+            killProcess(pid_global, (error) => {
+                console.log('server closed successfully');
+                if (error) {
+                    console.error('Failed to kill process:', error);
+                    return;
+                }
+            });
+        }
+        setTimeout(() => {
             app.quit();
-        });
+        }, 1000);
+
     }
 });
 

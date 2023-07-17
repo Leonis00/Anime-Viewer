@@ -5,11 +5,17 @@ const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
 const os = require('os');
+const session = require('express-session');
 const { getDirectoryPath, getVideoFilePathsFromDirectories, getVideoFilePathsFromDirectory, shuffleFileList, } = require('./get-file-paths');
 const port = 3000;
 
 app.use(express.json());
 app.use(cors());
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true
+}));
 
 function getIPv4() {
     const interfaces = os.networkInterfaces();
@@ -35,6 +41,15 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/index.html'));
 });
+
+app.get('/videoPlayer', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/videoPlayer.html'));
+});
+
+app.get('/videoPlayerNew', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/videoPlayerNew.html'));
+});
+
 
 app.post('/add_path', (req, res) => {
     let key, value;
@@ -220,7 +235,56 @@ getDirectoryPath()
         console.error('getDirectoryPath() 실행 중 에러가 발생했습니다.', error);
     });
 
+
+app.post('/sidebar/video', (req, res) => {
+    const path = req.body.path;
+    req.session.path = path;
+    res.send('응답합니다.');
+});
+
+
+app.get('/video_new', (req, res) => {
+    // 동영상 파일의 절대 경로   
+    const path = req.session.path;
+    if (!path) {
+        return;
+    }
+    console.log(path);
+
+    let absolutePath = path;
+    const stat = fs.statSync(absolutePath);
+    const fileSize = stat.size;
+    // Range 헤더를 통한 전송
+    const range = req.headers.range;
+    if (range) {
+        const parts = range.replace(/bytes=/, '').split('-');
+        let start = parseInt(parts[0], 10);
+        const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+        if (start > end) {
+            start = end - 1;
+        }
+
+        const chunkSize = (end - start) + 1;
+
+        const file = fs.createReadStream(absolutePath, { start, end });
+        const headers = {
+            'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+            'Accept-Ranges': 'bytes',
+            'Content-Length': chunkSize,
+            'Content-Type': 'video/mp4',
+        };
+
+        res.writeHead(206, headers);
+        file.pipe(res);
+        // const currentTime = new Date().toLocaleTimeString();
+        // const userAgent = req.headers['user-agent'];
+    }
+});
+
+
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-    console.log('pid:', process.pid);
+    console.log(`pid: ${process.pid}`) // main.js에서 추출하기 위한 코드
 });

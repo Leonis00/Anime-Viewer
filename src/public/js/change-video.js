@@ -45,7 +45,7 @@ const videoContainer = document.querySelector('#videoContainer');
 
 videoContainer.addEventListener("touchstart", (event) => {
     startY = event.touches[0].clientY;
-});
+}, { passive: true });
 
 videoContainer.addEventListener("touchend", (event) => {
     const endY = event.changedTouches[0].clientY;
@@ -82,4 +82,4 @@ videoContainer.addEventListener("touchend", (event) => {
                 console.error("Error occurred while sending video request:", error);
             });
     }
-});
+}, { passive: true });

@@ -27,18 +27,17 @@
         <ul class="nav-links">
           <li>
             <a href="#" id="viewDirectoryBtn"
-              ><img
-                src="images/repository_white.png"
-                alt="View Directory"
-                style="max-width: 30px"
+              ><img src="images/repository_white.png" alt="View Directory"
             /></a>
           </li>
           <li>
             <a href="#" id="fileSelectBtn"
-              ><img
-                src="images/plus_white.png"
-                alt="Register Directory"
-                style="max-width: 30px"
+              ><img src="images/plus_white.png" alt="Register Directory"
+            /></a>
+          </li>
+          <li>
+            <a href="#" id="menu"
+              ><img src="images/menu_white.png" alt="Menu"
             /></a>
           </li>
         </ul>
@@ -49,15 +48,16 @@
       <div id="videoContainer">
         <video src="/video" controls></video>
       </div>
-      <div id="rightPanel">
-        <div id="folderName">현재 폴더 <span id="folderNameValue"></span></div>
-        <div id="fileName">현재 파일 <span id="fileNameValue"></span></div>
-        <div id="fileList">
-          관련 재생목록
-          <ul id="playlist"></ul>
-        </div>
-      </div>
     </main>
+
+    <div id="sidebar">
+      <div id="folderName">현재 폴더 <span id="folderNameValue"></span></div>
+      <div id="fileName">현재 파일 <span id="fileNameValue"></span></div>
+      <div id="fileList">
+        관련 재생목록
+        <ul id="playlist"></ul>
+      </div>
+    </div>
 
     <footer class="footer">
       <p>&copy; My Video Viewer</p>

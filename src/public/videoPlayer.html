@@ -21,7 +21,7 @@
     const rangeHeaderValue = "bytes=0-"; // 전체 범위 요청
 
     // 비디오 요청에 range 헤더 설정
-    fetch("http://localhost:3000/video", {
+    fetch("/video", {
       headers: { Range: rangeHeaderValue },
     })
       .then((response) => {

@@ -12,15 +12,16 @@ let serverPid;
 button.addEventListener("click", () => {
 
     if (isServerOpen) {
-        // 서버 종료 로직
-        if (serverPid) {
-            killProcess(serverPid); // 저장된 PID로 포트 종료
-            serverPid = null; // PID 초기화
-        }
+
+        // 서버 종료 로직        
+        killProcess(serverPid); // 저장된 PID로 포트 종료
 
         button.innerText = "Open Server";
         output.innerText = "Server closed.";
         isServerOpen = false;
+
+        ipcRenderer.send('server-status', { isOpen: false }); // 포트가 닫혔음을 메인 프로세스에 전송
+
         console.log('Server closed');
 
     } else {
@@ -35,17 +36,22 @@ button.addEventListener("click", () => {
             console.error(`[Error] ${data}`);
         });
 
+        ipcRenderer.once('pid', (event, arg) => {
+            serverPid = arg; // PID 저장
+            console.log('Received pid:', serverPid);
+        });
+
         output.innerText = getIPv4();
         button.innerText = "Close Server";
         isServerOpen = true;
+
+        ipcRenderer.send('server-status', { isOpen: true }); // 포트가 열렸음을 메인 프로세스에 전송
+
         console.log('Server opened');
     }
 });
 
-ipcRenderer.once('pid', (event, arg) => {
-    serverPid = arg; // PID 저장
-    console.log('Received pid:', serverPid);
-});
+
 
 // PID를 사용하여 프로세스를 종료하는 함수
 function killProcess(pid) {
